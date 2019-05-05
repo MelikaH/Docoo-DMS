@@ -1,0 +1,199 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.complited {
+  text-decoration: line-through;
+}
+#apppage .gradient {
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+  background: -webkit-gradient(
+    linear,
+    45deg,
+    from(rgba(42, 27, 161, 0.7)),
+    to(rgba(29, 210, 177, 0.7))
+  );
+  background: -o-linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+}
+
+#apppage .view {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;
+}
+
+#apppage h6 {
+  line-height: 1.7;
+}
+#apppage .gradient {
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+  background: -webkit-gradient(
+    linear,
+    45deg,
+    from(rgba(42, 27, 161, 0.7)),
+    to(rgba(29, 210, 177, 0.7))
+  );
+  background: -o-linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(42, 27, 161, 0.7),
+    rgba(29, 210, 177, 0.7) 100%
+  );
+}
+
+#apppage .view {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;
+  background-image: url("https://provokeinsights.com/wp-content/uploads/2018/10/portrait-of-a-business-woman-working-on-laptop_1303-9731.jpg");
+}
+
+#apppage #navbar1 {
+  visibility: hidden;
+}
+
+#apppage h6 {
+  line-height: 1.7;
+}
+.fa-handshake {
+  color: #00c851;
+}
+.pt-3 {
+  text-align: center;
+}
+.cover {
+  background-color: bisque;
+}
+.nav-link {
+  width: 100px;
+}
+.dashboard {
+  font-size: 25px;
+  color: white;
+}
+.dashlink {
+  display: inline-block;
+}
+.dashlink:hover {
+  background-color: rgba(112, 112, 112, 0.2);
+}
+i {
+  padding-right: 35px;
+}
+.logoutbtn .search {
+  z-index: 1;
+}
+h2.welcome {
+  text-align: center;
+}
+#firstnav {
+  z-index: 10;
+}
+#loginhead {
+  text-align: center;
+  padding-bottom: 30px;
+}
+#whenloggednav {
+  align-items: center;
+}
+#checkbox {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.containerError {
+  text-align: center;
+  padding-top: 150px;
+}
+
+#errortext {
+  background: -webkit-linear-gradient(#2a1ba1, #1dd2b1);
+  -webkit-background-clip: text;
+  font-size: 72px;
+  -webkit-text-fill-color: transparent;
+}
+#errorbtn {
+  border-radius: 12px;
+}
+.sidelink {
+  color: gray;
+}
+
+.sidelink:hover {
+  color: #1dd2b1;
+}
+
+.fas {
+  padding-left: 35px;
+  padding-top: 10px;
+  color: gray;
+}
+#toolbar {
+  justify-content: center;
+  align-items: center;
+}
+
+#usericon {
+  padding-bottom: 10px;
+}
+.img-fluid {
+  width: 100%;
+}
+#regbtn {
+  margin-bottom: 100px;
+}
+.organizationInput1 {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.organizationInput2 {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.steponerow {
+  align-items: center;
+}
