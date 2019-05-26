@@ -8,6 +8,7 @@ class Profile extends Component {
       firstName: "",
       lastName: "",
       email: "",
+      role: "",
       isOpen: false
     };
   }
@@ -24,8 +25,10 @@ class Profile extends Component {
     this.setState({
       firstName: decoded.firstName,
       lastName: decoded.lastName,
-      email: decoded.email
+      email: decoded.email,
+      role: decoded.role
     });
+    console.log("radi");
   }
 
   render() {

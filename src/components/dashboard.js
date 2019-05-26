@@ -14,17 +14,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
 import FolderIcon from "@material-ui/icons/Folder";
-import {
-  MDBNavbarNav,
-  MDBNavItem,
-  MDBNavLink,
-  MDBRow,
-  MDBDropdownToggle,
-  MDBDropdownMenu,
-  MDBDropdownItem,
-  MDBBtn,
-  MDBFormInline
-} from "mdbreact";
+import HomeOutlined from "@material-ui/icons/HomeOutlined";
+import PortraitRounded from "@material-ui/icons/PortraitRounded";
+import Folders from "./folders";
+import InsideFolder from "./insideFolder";
 import jwt_decode from "jwt-decode";
 import Profile from "./profile";
 import Home from "./home";
@@ -95,6 +88,7 @@ class Dashboard extends React.Component {
 
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
+    this.folders();
   };
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
@@ -106,55 +100,55 @@ class Dashboard extends React.Component {
   home = () => {
     this.setState(state => ({ main: "home" }));
   };
-
+  folders = () => {
+    this.setState(state => ({ main: "folders" }));
+  };
+  insideFolder = () => {
+    this.setState(state => ({ main: "inside" }));
+  };
   render() {
     const { classes, theme } = this.props;
 
     const drawer = (
       <div>
         <div className={classes.toolbar}>
-          <img src="public/favicon.ico" />
+          <img src="/favicon.ico" alt="Docoo Logo" id="imglogo" />
         </div>
 
-        <Divider />
-        <MDBNavbarNav left>
-          <MDBNavItem active className="dashlink" onClick={this.home}>
-            <MDBRow>
-              <i className="fas fa-home" />
-              <MDBNavLink to="/dashboard" className="sidelink">
-                Home
-              </MDBNavLink>
-            </MDBRow>
-          </MDBNavItem>
-          <MDBNavItem button className="dashlink" onClick={this.profile}>
-            <MDBRow>
-              <i className="fas fa-user" />
-              <MDBNavLink to="/dashboard" className="sidelink">
-                Profile
-              </MDBNavLink>
-            </MDBRow>
-          </MDBNavItem>
-
-          <List>
-            <ListItem button onClick={this.handleClick}>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText inset primary="Folders" />
-              {this.state.open ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <StarBorder />
-                  </ListItemIcon>
-                  <ListItemText inset primary="Starred" />
-                </ListItem>
-              </List>
-            </Collapse>
-          </List>
-        </MDBNavbarNav>
+        <Divider id="divider" />
+        <List>
+          <ListItem button onClick={this.home}>
+            <ListItemIcon>
+              <HomeOutlined />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button onClick={this.profile}>
+            <ListItemIcon>
+              <PortraitRounded />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListItem>
+        </List>
+        <List>
+          <ListItem button onClick={this.handleClick}>
+            <ListItemIcon>
+              <FolderIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Folders" />
+            {this.state.open ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <StarBorder />
+                </ListItemIcon>
+                <ListItemText inset primary="Starred" />
+              </ListItem>
+            </List>
+          </Collapse>
+        </List>
       </div>
     );
 
@@ -197,7 +191,12 @@ class Dashboard extends React.Component {
           <h2 className="welcome">
             Welcome to your dashboard, {this.state.firstName}!
           </h2>
-          {this.state.main == "profile" ? <Profile /> : <Home />}
+          {this.state.main === "profile" ? <Profile /> : null}
+          {this.state.main === "folders" ? (
+            <Folders insideFolder={this.insideFolder} />
+          ) : null}
+          {this.state.main === "home" ? <Home /> : null}
+          {this.state.main === "inside" ? <InsideFolder /> : null}
         </main>
       </div>
     );

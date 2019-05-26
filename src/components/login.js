@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { login } from "./userFunctions";
-
+import { getCompany } from "./companyFunctions";
+import { withRouter } from "react-router-dom";
 class Login extends Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      companyId: "",
+      role: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -23,21 +26,38 @@ class Login extends Component {
 
     const user = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
+      companyId: this.state.companyId,
+      role: this.state.role
     };
 
     login(user).then(res => {
-      if (res) {
-        this.props.history.push("/dashboard");
+      if (res.error != undefined) {
+        alert(res.error);
+        this.props.history.push("/login");
+      } else {
+        getCompany().then(c => {
+          console.log("login company", c);
+          if (c.name == "...") this.props.history.push("/orginfo");
+          else this.props.history.push("/userpage");
+        });
       }
     });
   }
   render() {
     return (
-      <div className="container">
+      <div className="animatedBackground">
+        <ul className="box-area">
+          <li />
+          <li />
+          <li />
+          <li />
+          <li />
+          <li />
+        </ul>
         <div className="row">
-          <div className="col-md-6 mt-5 mx-auto">
-            <form noValidate onSubmit={this.onSubmit}>
+          <div className="formalogin col-md-6 mt-5 mx-auto">
+            <form noValidate onSubmit={this.onSubmit} id="loginform">
               <h1 className="h3 mb-3 font-weight-normal" id="loginhead">
                 Please sign in
               </h1>
@@ -77,4 +97,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

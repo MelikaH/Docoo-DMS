@@ -3,12 +3,12 @@ import { withRouter } from "react-router-dom";
 
 import {
   MDBNavbar,
-  MDBNavbarBrand,
+  MDBCarousel,
+  MDBCarouselCaption,
+  MDBCarouselInner,
+  MDBCarouselItem,
   MDBNavbarNav,
   MDBNavItem,
-  MDBNavLink,
-  MDBNavbarToggler,
-  MDBCollapse,
   MDBFooter,
   MDBMask,
   MDBRow,
@@ -63,8 +63,9 @@ class Landing extends Component {
     const here = (
       <MDBNavItem>
         <MDBRow waves id="whenloggednav">
-          <i class="fas fa-user fa-2x" />
-
+          <a href="/userpage">
+            <i className="far fa-user-circle fa-3x" id="usericon" />
+          </a>
           <MDBBtn href="" onClick={this.logOut.bind(this)} className="nav-link">
             Log out
           </MDBBtn>
@@ -75,9 +76,9 @@ class Landing extends Component {
       <div id="apppage">
         <MDBView>
           <nav class="navbar navbar-expand-lg navbar-dark" id="firstnav">
-            <div class="container ">
-              <a class="navbar-brand" href="">
-                <img src="../../public/favicon.ico" />
+            <div className="container ">
+              <a className="navbar-brand" href="">
+                <img src="/favicon.png" />
               </a>
               <button
                 class="navbar-toggler"
@@ -97,12 +98,20 @@ class Landing extends Component {
               >
                 <ul class="navbar-nav mr-auto">
                   <li class="nav-item">
-                    <a class="nav-link waves-effect waves-light" href="/about">
+                    <a
+                      class="nav-link waves-effect waves-light"
+                      target="_blank"
+                      href="/about"
+                    >
                       About
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link waves-effect waves-light" href="/help">
+                    <a
+                      class="nav-link waves-effect waves-light"
+                      target="_blank"
+                      href="/help"
+                    >
                       Help
                     </a>
                   </li>
@@ -131,7 +140,7 @@ class Landing extends Component {
                   <MDBBtn href="/register" color="white">
                     Join Us
                   </MDBBtn>
-                  <MDBBtn href="/about" outline color="white">
+                  <MDBBtn href="/about" outline color="white" target="_blank">
                     Learn More
                   </MDBBtn>
                 </div>
@@ -260,10 +269,14 @@ class Landing extends Component {
                   style={{ width: "60px" }}
                 />
                 <p>
-                  <a href="/about">About Us</a>
+                  <a href="/about" target="_blank">
+                    About Us
+                  </a>
                 </p>
                 <p>
-                  <a href="/help">Help</a>
+                  <a href="/help" target="_blank">
+                    Help
+                  </a>
                 </p>
               </MDBCol>
               <MDBCol md="4" lg="3" xl="3" className="mb-4">

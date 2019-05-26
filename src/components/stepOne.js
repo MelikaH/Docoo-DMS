@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { MDBCol, MDBRow } from "mdbreact";
 import InputLabel from "@material-ui/core/InputLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import HorizontalLinearStepper from "./organizationInfo";
 import RaisedButton from "material-ui/RaisedButton";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import TextField from "material-ui/TextField";
+import { organization } from "./companyFunctions";
 
 class StepOne extends Component {
   continue = e => {
@@ -16,6 +16,16 @@ class StepOne extends Component {
   submitHandler = event => {
     event.preventDefault();
     event.target.className += " was-validated";
+    const company = {
+      name: this.props.name,
+      city: this.props.city,
+      email: this.props.email,
+      phone: this.props.phone,
+      country: this.props.country,
+      address: this.props.address
+    };
+    console.log("before call");
+    organization(company);
     this.props.handleNext();
   };
 

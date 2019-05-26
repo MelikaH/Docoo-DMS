@@ -4,25 +4,11 @@ import { withStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import {
-  MDBContainer,
-  MDBBtn,
-  MDBModal,
-  MDBModalBody,
-  MDBIcon,
-  MDBRow,
-  MDBBadge,
-  MDBModalFooter,
-  MDBModalHeader
-} from "mdbreact";
 
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
-import StepThree from "./stepThree";
 import StepFour from "./stepFour";
-import { organization } from "./companyFunctions";
 const styles = theme => ({
   root: {
     width: "90%"
@@ -43,15 +29,13 @@ var h3style = {
 };
 
 function getSteps() {
-  return ["Genreal", "Sync place", "Form options", "Thank You!"];
+  return ["Genreal", "Sync place", "Thank You!"];
 }
 
 class HorizontalLinearStepper extends React.Component {
   state = {
     activeStep: 0,
-    modal: true,
     skipped: new Set(),
-    checked: false,
     name: "",
     address: "",
     email: "",
@@ -79,30 +63,6 @@ class HorizontalLinearStepper extends React.Component {
       activeStep: activeStep + 1,
       skipped
     });
-    if (this.activeStep === getSteps().length - 1) {
-      const company = {
-        name: this.state.name,
-        address: this.state.address,
-        email: this.state.email,
-        phone: this.state.phone,
-        city: this.state.city,
-        country: this.state.country,
-        cloudapi: this.state.cloudApi
-      };
-      if (
-        company.name !== "" &&
-        company.address !== "" &&
-        company.phone !== "" &&
-        company.email !== "" &&
-        company.city !== "" &&
-        company.country !== "" &&
-        company.cloudapi !== ""
-      ) {
-        organization(company).then(res => {
-          this.props.history.push("/admin");
-        });
-      }
-    }
   };
 
   handleBack = () => {
@@ -137,17 +97,11 @@ class HorizontalLinearStepper extends React.Component {
   isStepSkipped(step) {
     return this.state.skipped.has(step);
   }
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal
-    });
-  };
 
   render() {
     const { classes } = this.props;
     const steps = getSteps();
     const { activeStep } = this.state;
-    const { checked } = this.state;
     const { name, address, email, phone, city, country, cloudApi } = this.state;
     const values = { name, address, email, phone, city, country, cloudApi };
     switch (activeStep) {
@@ -218,42 +172,8 @@ class HorizontalLinearStepper extends React.Component {
             />
           </div>
         );
+
       case 2:
-        return (
-          <div>
-            <h3 style={h3style}>
-              Please insert your organization's information in the form provided
-              below. Follow the instructions.
-            </h3>
-            <Stepper activeStep={activeStep}>
-              {steps.map((label, index) => {
-                const props = {};
-                const labelProps = {};
-                if (this.isStepOptional(index)) {
-                  labelProps.optional = (
-                    <Typography variant="caption">Optional</Typography>
-                  );
-                }
-                if (this.isStepSkipped(index)) {
-                  props.completed = false;
-                }
-                return (
-                  <Step key={label} {...props} next={this.handleNext}>
-                    <StepLabel {...labelProps}>{label}</StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
-            <StepThree
-              handleSkip={this.handleSkip}
-              handleChange={this.handleChange}
-              handleNext={this.handleNext}
-              values={values}
-              handleBack={this.handleBack}
-            />
-          </div>
-        );
-      case 3:
         return (
           <div>
             <h3 style={h3style}>

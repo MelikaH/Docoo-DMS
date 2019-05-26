@@ -22,7 +22,7 @@ class Navbar extends Component {
   }
   render() {
     const userLink = (
-      <MDBNavbarNav right>
+      <MDBNavbarNav right id="dashanv">
         <MDBNavItem>
           <MDBRow waves className="navright">
             <div className="md-form my-0">

@@ -21,9 +21,15 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  companyID: {
+    type: String
+  },
   isDeleted: {
     type: Boolean,
     default: false
+  },
+  companyId: {
+    type: String
   }
 });
 

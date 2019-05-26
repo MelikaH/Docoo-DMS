@@ -1,18 +1,56 @@
 import React, { Component } from "react";
-import { MDBInput, MDBRow } from "mdbreact";
+import { browserHistory } from "history";
+import {
+  MDBAnimation,
+  MDBRow,
+  MDBCol,
+  MDBBtn,
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+  MDBModalFooter
+} from "mdbreact";
 import RaisedButton from "material-ui/RaisedButton";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { List, ListItem } from "material-ui/List";
+import { organization } from "./companyFunctions";
+import { withRouter } from "react-router-dom";
 
 export class StepFour extends Component {
-  continue = e => {
-    e.preventDefault();
-    this.props.handleNext();
+  state = {
+    modal: false
+  };
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
   };
 
   back = e => {
     e.preventDefault();
     this.props.handleBack();
+  };
+
+  onSave = e => {
+    e.preventDefault();
+    console.log(this.props);
+    const company = {
+      name: this.props.values.name,
+      address: this.props.values.address,
+      email: this.props.values.email,
+      city: this.props.values.city,
+      phone: this.props.values.phone,
+      country: this.props.values.country,
+      cloudApi: this.props.values.cloudApi
+    };
+    console.log("before call");
+    organization(company).then(res => {
+      this.props.history.push("/userpage");
+      console.log("sto te nema");
+
+      console.log("we made it");
+    });
   };
 
   render() {
@@ -51,8 +89,33 @@ export class StepFour extends Component {
           label="Confirm"
           primary={true}
           style={styles.button}
-          onClick={this.continue}
+          onClick={this.toggle}
         />
+        <MDBModal isOpen={this.state.modal} toggle={this.toggle} centered>
+          <MDBModalHeader toggle={this.toggle}>
+            Welcome to our family!
+          </MDBModalHeader>
+          <MDBModalBody id="modalbody">
+            <strong>Congratulations!</strong> You have successfully set up
+            Docoo, and now you can start managing your documents. Feel free to
+            ask anything on docoo@hotmail.com.
+            <MDBRow>
+              <MDBCol md="9" className="ml-auto">
+                <MDBAnimation type="shake">
+                  <i className="far fa-handshake fa-8x" />{" "}
+                </MDBAnimation>
+              </MDBCol>
+            </MDBRow>
+          </MDBModalBody>
+          <MDBModalFooter>
+            <MDBBtn outline color="success" onClick={this.toggle}>
+              Close
+            </MDBBtn>
+            <MDBBtn color="success" onClick={this.onSave}>
+              Save changes
+            </MDBBtn>
+          </MDBModalFooter>
+        </MDBModal>
       </MuiThemeProvider>
     );
   }
@@ -64,4 +127,4 @@ const styles = {
   }
 };
 
-export default StepFour;
+export default withRouter(StepFour);

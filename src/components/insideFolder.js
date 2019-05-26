@@ -14,33 +14,27 @@ import {
   MDBModalHeader,
   MDBModalFooter
 } from "mdbreact";
-import Folder from "@material-ui/icons/Folder";
-import Edit from "@material-ui/icons/Edit";
-import Mail from "@material-ui/icons/Mail";
-import Delete from "@material-ui/icons/Delete";
+import Home from "./home";
 import NewFolder from "./newFolder";
 import { withRouter } from "react-router-dom";
 
 import { MDBBtn } from "mdbreact";
-import { getUsers } from "./userFunctions";
+import { getItems } from "./folderFunctions";
 import { getFolders } from "./folderFunctions";
 import { deleteFolder } from "./folderFunctions";
 
-class Folders extends Component {
+class InsideFolder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "",
-      lastName: "",
       name: "",
       parentId: "",
       description: "",
-      folders: [],
-      users: [],
+      items: [],
       modal14: false,
+      modal15: false,
       permissions: [],
-      creator: "",
-      id: ""
+      creator: ""
     };
   }
 
@@ -49,43 +43,27 @@ class Folders extends Component {
     const decoded = jwt_decode(token);
     this.setState({
       creator: decoded.firstName + " " + decoded.lastName,
-      folders: [],
-      users: [],
-      modalTitle: ""
+      items: [],
+      modalTitle: "",
+      folder: decoded.folder
     });
-    console.log("starting getting folders");
-    this.loadFolders();
     console.log("starting get users");
-    this.loadUsers();
+    this.loadItems();
   }
 
-  insideFolder = e => {
-    e.preventDefault();
-    this.props.insideFolder();
-  };
-
-  loadUsers = () => {
+  loadItems = () => {
     this.setState({
-      _id: this.state.id,
       name: this.state.name,
       parentId: this.state.parentId,
       description: this.state.description,
       persmission: this.state.permissions,
       creator: this.state.creator,
-      folders: []
+      items: []
     });
-    getUsers().then(x => {
+    getItems().then(x => {
       console.log("setting state");
-      this.setState({ users: x });
+      this.setState({ items: x });
       console.log("done");
-    });
-  };
-
-  loadFolders = () => {
-    getFolders().then(f => {
-      console.log("setting state of folders");
-      this.setState({ folders: f });
-      console.log("folders all set");
     });
   };
 
@@ -100,32 +78,21 @@ class Folders extends Component {
   render() {
     return (
       <div id="folderDiv" className="my-5 px-1 pb-1 text-center">
-        <h2 centered>Folder Section</h2>
+        <h2 centered>Folder inside Section</h2>
         <hr />
         <MDBBtn
           gradient="aqua"
-          id="addemployee"
           onClick={() => this.toggle(14, "Add New Folder ", {})}
         >
-          + ADD NEW FOLDER{" "}
+          + ADD NEW FOLDER
         </MDBBtn>
-        <MDBRow>
-          {this.state.folders.map((folder, key) => (
-            <MDBCol key={folder._id} lg="3" md="6" className="mb-lg-0 mb-5">
-              <MDBBtn
-                tag="a"
-                size="lg"
-                floating
-                id="addemployee"
-                onClick={this.insideFolder}
-              >
-                <i className=" far fa-folder fa-6x" />
-                <br />
-                {folder.name}
-              </MDBBtn>
-            </MDBCol>
-          ))}
-        </MDBRow>
+        <MDBBtn
+          gradient="aqua"
+          onClick={() => this.toggle(15, "Add New File ", {})}
+        >
+          + ADD NEW FILE
+        </MDBBtn>
+
         <div id="modalContainer">
           <MDBModal
             className="modalup"
@@ -147,9 +114,30 @@ class Folders extends Component {
             </MDBModalFooter>
           </MDBModal>
         </div>
+        <div id="modalContainer">
+          <MDBModal
+            className="modalup"
+            isOpen={this.state.modal15}
+            toggle={this.toggle}
+            centered
+            size="lg"
+          >
+            <MDBModalHeader toggle={() => this.toggle(15)}>
+              {this.state.modalTitle}
+            </MDBModalHeader>
+            <MDBModalBody>
+              <Home />
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={() => this.toggle(15)}>
+                Close
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModal>
+        </div>
       </div>
     );
   }
 }
 
-export default withRouter(Folders);
+export default withRouter(InsideFolder);

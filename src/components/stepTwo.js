@@ -1,6 +1,7 @@
 import React from "react";
-import { MDBInput, MDBCol } from "mdbreact";
+import { MDBCol } from "mdbreact";
 import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class StepTwo extends React.Component {
@@ -20,13 +21,12 @@ class StepTwo extends React.Component {
       <MuiThemeProvider>
         <MDBCol md="12">
           <p> Please add your cloud API in the provided field:</p>
-          <MDBInput
-            label="API key"
-            name="cloudApi"
-            className="mt-4"
-            defaultValue={values.cloudApi}
-            required
+          <TextField
+            hintText="Enter your cloud API"
+            floatingLabelText="Cloud Api"
             onChange={handleChange("cloudApi")}
+            defaultValue={values.cloudApi}
+            className="organizationInput1"
           />
           <RaisedButton
             label="Back"

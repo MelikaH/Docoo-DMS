@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
+import { getCompany } from "./companyFunctions";
 
 class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       firstName: "",
-      lastName: "",
+      name: "",
+      address: "",
+      city: "",
       email: "",
-      isOpen: false
+      phone: "",
+      lastName: "",
+      isOpen: false,
+      company: {}
     };
   }
 
@@ -19,13 +25,13 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    const token = localStorage.usertoken;
-    const decoded = jwt_decode(token);
-    this.setState({
-      firstName: decoded.firstName,
-      lastName: decoded.lastName,
-      email: decoded.email
-    });
+    getCompany().then(x =>
+      this.setState({
+        company: x
+      })
+    );
+
+    console.log("starting get users");
   }
 
   render() {
@@ -38,16 +44,16 @@ class Profile extends Component {
           <table className="table col-md-6 mx-auto">
             <tbody>
               <tr>
-                <td>First Name</td>
-                <td>{this.state.firstName}</td>
+                <td> Name</td>
+                <td>{this.state.company.name}</td>
               </tr>
               <tr>
-                <td>Last Name</td>
-                <td>{this.state.lastName}</td>
+                <td>Address</td>
+                <td>{this.state.company.address}</td>
               </tr>
               <tr>
-                <td>Email</td>
-                <td>{this.state.email}</td>
+                <td>City</td>
+                <td>{this.state.company.city}</td>
               </tr>
             </tbody>
           </table>

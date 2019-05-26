@@ -6,9 +6,18 @@ import {
   MDBCardImage,
   MDBCardTitle,
   MDBCardText,
+  MDBInput,
+  MDBRow,
   MDBCol
 } from "mdbreact";
 import { storage } from "../firebase";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import TextField from "material-ui/TextField";
+import jwt_decode from "jwt-decode";
+import NotAvailable from "./not-available";
+import { withRouter } from "react-router-dom";
+
+import { addNew } from "./fileFunctions";
 
 class Home extends Component {
   constructor(props) {
@@ -18,10 +27,27 @@ class Home extends Component {
       url: "",
       progress: 0,
       isOpen: false,
-      selectedFile: null
+      selectedFile: null,
+      name: "",
+      description: "",
+      tags: "",
+      creator: "",
+      date: this.Date,
+      id: "",
+      files: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const token = localStorage.usertoken;
+    const decoded = jwt_decode(token);
+    this.setState({
+      creator: decoded.firstName + " " + decoded.lastName
+    });
   }
 
   handleChange = e => {
@@ -30,6 +56,32 @@ class Home extends Component {
       this.setState(() => ({ image }));
     }
   };
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+  onSubmit(e) {
+    console.log("clicked add new file");
+    e.preventDefault();
+    const file = {
+      _id: this.state.id,
+      name: this.state.name,
+      tags: this.state.tags,
+      description: this.state.description,
+      creator: this.state.creator
+    };
+
+    console.log(file);
+    addNew(file).then(res => {
+      console.log("pozivam addNew");
+      if (res.data.status === "ok") {
+        this.props.history.push("/admin");
+      } else alert(res.data.error);
+    });
+
+    this.handleUpload();
+  }
 
   handleUpload = () => {
     const { image } = this.state;
@@ -43,10 +95,7 @@ class Home extends Component {
         );
         this.setState({ progress });
       },
-      error => {
-        // error function ....
-        console.log(error);
-      },
+      error => {},
       () => {
         // complete function ....
         storage
@@ -65,7 +114,7 @@ class Home extends Component {
     const { barprogress } = this.state;
 
     return (
-      <div>
+      <MuiThemeProvider>
         <MDBCol>
           <MDBCard style={{ width: "100%" }}>
             <MDBCardImage
@@ -76,28 +125,73 @@ class Home extends Component {
             />
 
             <MDBCardBody>
-              <MDBCardTitle>Uploading Document</MDBCardTitle>
-              <progress
-                value={this.state.progress}
-                max="100"
-                active={barprogress}
-                style={{ flex: 1 }}
-              />
-              <MDBCardText>
-                Please, choose the file and then click the UPLOAD button to
-                upload it.
-              </MDBCardText>
+              <form
+                noValidate
+                className="needs-validation"
+                onSubmit={this.onSubmit}
+              >
+                <input type="hidden" name="_id" value={this.state._id} />
 
-              <input type="file" onChange={this.handleChange} />
-              <MDBBtn onClick={this.handleUpload} style={{ flex: 1 }}>
-                Upload
-              </MDBBtn>
+                <MDBCardTitle>Uploading Document</MDBCardTitle>
+
+                <MDBCardText>
+                  Please insert the needed information and choose the file.
+                  Click the UPLOAD button to upload it.
+                </MDBCardText>
+                <TextField
+                  hintText="Enter the file name"
+                  floatingLabelText="File Name"
+                  onChange={this.onChange}
+                  value={this.state.name}
+                  className="organizationInput1"
+                  name="name"
+                />
+                <TextField
+                  hintText="Enter the file tags"
+                  floatingLabelText="File Tags"
+                  onChange={this.onChange}
+                  value={this.state.tags}
+                  className="organizationInput1"
+                  name="tags"
+                />
+                <MDBCol md="12">
+                  <MDBInput
+                    type="textarea"
+                    label="Description of the file"
+                    rows="3"
+                    value={this.state.description}
+                    onChange={this.onChange}
+                    name="description"
+                  />
+                </MDBCol>
+
+                <input
+                  type="file"
+                  onChange={this.handleChange}
+                  style={{ flex: 1 }}
+                />
+
+                <progress
+                  value={this.state.progress}
+                  max="100"
+                  active={barprogress}
+                  style={{ flex: 1 }}
+                />
+                <p>{this.state.creator}</p>
+                <MDBCol md="3" className="ml-md-auto">
+                  <MDBRow>
+                    <MDBBtn type="submit" style={{ flex: 1 }}>
+                      Upload
+                    </MDBBtn>
+                  </MDBRow>
+                </MDBCol>
+              </form>
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
 
-export default Home;
+export default withRouter(Home);

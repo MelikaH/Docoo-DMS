@@ -1,7 +1,26 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
-import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBIcon } from "mdbreact";
+import {
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBIcon,
+  MDBBtn,
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+  MDBModalFooter
+} from "mdbreact";
 
+import Edit from "@material-ui/icons/Edit";
+import Mail from "@material-ui/icons/Mail";
+import Delete from "@material-ui/icons/Delete";
+
+import NewEmployee from "./newEmp";
+import { getUsers } from "./userFunctions";
+import { deleteUser } from "./userFunctions";
+import { withRouter } from "react-router-dom";
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -9,7 +28,11 @@ class Users extends Component {
       firstName: "",
       lastName: "",
       email: "",
-      role: ""
+      role: "",
+      employees: [],
+      companyId: "",
+      modal14: false,
+      users: []
     };
   }
 
@@ -20,9 +43,32 @@ class Users extends Component {
       firstName: decoded.firstName,
       lastName: decoded.lastName,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role,
+      companyId: decoded.companyId,
+      users: [],
+      modalTitle: ""
     });
+    console.log("starting get users");
+    this.loadUsers();
   }
+
+  loadUsers = () => {
+    getUsers().then(x => {
+      console.log("setting state");
+      this.setState({ users: x });
+      console.log("done");
+      console.log(this.state.companyId);
+    });
+  };
+
+  toggle = (nr, title, usr) => {
+    let modalNumber = "modal" + nr;
+    this.setState({
+      [modalNumber]: !this.state[modalNumber],
+      modalTitle: title,
+      modalUser: usr
+    });
+  };
 
   render() {
     return (
@@ -30,91 +76,76 @@ class Users extends Component {
         <MDBCard className="my-5 px-5 pb-5 text-center">
           <MDBCardBody>
             <h2 className="h1-responsive font-weight-bold my-5">Employees:</h2>
+            <MDBBtn
+              gradient="aqua"
+              id="addemployee"
+              onClick={() => this.toggle(14, "Add New Employee", {})}
+            >
+              + ADD NEW EMPLOYEE
+            </MDBBtn>
+
             <MDBRow>
-              <MDBCol lg="3" md="6" className="mb-lg-0 mb-5">
-                <h5 className="font-weight-bold mt-4 mb-3">
-                  {this.state.firstName}
-                </h5>
-                <p className="text-uppercase blue-text">{this.state.role} </p>
-                <p className="grey-text">
-                  Neque porro quisquam est, qui dolorem ipsum quia dolor sit
-                  amet, consectetur, adipisci sed quia non numquam modi tempora
-                  eius.
-                </p>
-                <ul className="list-unstyled mb-0">
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="facebook-f" className="blue-text" />
-                  </a>
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="twitter" className="blue-text" />
-                  </a>
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="instagram" className="blue-text" />
-                  </a>
-                </ul>
-              </MDBCol>
+              {this.state.users.map((user, key) => (
+                <MDBCol key={user._id} lg="3" md="6" className="mb-lg-0 mb-5">
+                  <h5 className="font-weight-bold mt-4 mb-3">
+                    {user.firstName}
+                  </h5>
 
-              <MDBCol lg="3" md="6" className="mb-lg-0 mb-5">
-                <h5 className="font-weight-bold mt-4 mb-3">John Doe</h5>
-                <p className="text-uppercase blue-text">Web Developer</p>
-                <p className="grey-text">
-                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                  ipsa accusantium doloremque rem laudantium totam aperiam.
-                </p>
-                <ul className="list-unstyled mb-0">
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="facebook-f" className="blue-text" />
-                  </a>
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="instagram" className="blue-text" />
-                  </a>
-                </ul>
-              </MDBCol>
-
-              <MDBCol lg="3" md="6" className="mb-lg-0 mb-5">
-                <h5 className="font-weight-bold mt-4 mb-3">Maria Smith</h5>
-                <p className="text-uppercase blue-text">Photographer</p>
-                <p className="grey-text">
-                  Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                  qui officia deserunt mollit anim est fugiat nulla id eu
-                  laborum.
-                </p>
-                <ul className="list-unstyled mb-0">
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="facebook-f" className="blue-text" />
-                  </a>
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="instagram" className="blue-text" />
-                  </a>
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="dribbble" className="blue-text" />
-                  </a>
-                </ul>
-              </MDBCol>
-
-              <MDBCol lg="3" md="6" className="mb-lg-0 mb-5">
-                <h5 className="font-weight-bold mt-4 mb-3">Tom Adams</h5>
-                <p className="text-uppercase blue-text">Backend Developer</p>
-                <p className="grey-text">
-                  Perspiciatis repellendus ad odit consequuntur, eveniet earum
-                  nisi qui consectetur totam officia voluptates perferendis
-                  voluptatibus aut.
-                </p>
-                <ul className="list-unstyled mb-0">
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="facebook-f" className="blue-text" />
-                  </a>
-                  <a href="#!" className="p-2 fa-lg">
-                    <MDBIcon fab icon="github" className="blue-text" />
-                  </a>
-                </ul>
-              </MDBCol>
+                  <p className="text-uppercase blue-text">{user.role} </p>
+                  <p className="grey-text">Email: {user.email}</p>
+                  <ul className="list-unstyled mb-0">
+                    <a
+                      onClick={() => this.toggle(14, "Edit Employee", user)}
+                      className="p-2 fa-lg"
+                    >
+                      <Edit className="blue-text" />
+                    </a>
+                    <a href={"mailto:" + user.email} className="p-2 fa-lg">
+                      <Mail className="blue-text" />
+                    </a>
+                    <a
+                      className="p-2 fa-lg"
+                      onClick={() => {
+                        deleteUser(user._id).then(res => {
+                          this.loadUsers();
+                        });
+                      }}
+                    >
+                      <Delete className="blue-text" />
+                    </a>
+                  </ul>
+                </MDBCol>
+              ))}
             </MDBRow>
           </MDBCardBody>
         </MDBCard>
+        <div id="modalContainer">
+          <MDBModal
+            className="modalup"
+            isOpen={this.state.modal14}
+            toggle={this.toggle}
+            centered
+            size="lg"
+          >
+            <MDBModalHeader toggle={() => this.toggle(14)}>
+              {this.state.modalTitle}
+            </MDBModalHeader>
+            <MDBModalBody>
+              <NewEmployee
+                user={this.state.modalUser}
+                companyId={this.state.companyId}
+              />
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={() => this.toggle(14)}>
+                Close
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModal>
+        </div>
       </div>
     );
   }
 }
 
-export default Users;
+export default withRouter(Users);

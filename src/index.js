@@ -8,12 +8,20 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import blueGrey from "@material-ui/core/colors/blueGrey";
+import axios from "axios";
+
 const theme = createMuiTheme({
   palette: {
     secondary: {
       main: blueGrey[900]
     }
   }
+});
+
+// Add a request interceptor
+axios.interceptors.request.use(function(config) {
+  config.headers.Authorization = localStorage.usertoken;
+  return config;
 });
 
 ReactDOM.render(

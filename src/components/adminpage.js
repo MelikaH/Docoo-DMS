@@ -19,6 +19,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
+import PlusOne from "@material-ui/icons/PlusOne";
 import FolderIcon from "@material-ui/icons/Folder";
 import Collapse from "@material-ui/core/Collapse";
 import VerifiedUser from "@material-ui/icons/VerifiedUser";
@@ -28,12 +29,15 @@ import HomeOutlined from "@material-ui/icons/HomeOutlined";
 
 import { MDBBtn, MDBInput, MDBCol } from "mdbreact";
 import jwt_decode from "jwt-decode";
-
+import { withRouter } from "react-router-dom";
 import Home from "../components/home";
 import Users from "../components/users";
 import Organization from "../components/orgInfo";
-import Folders from "../components/folders";
+import Folders from "./folders";
 import Access from "../components/access";
+import InsideFolder from "./insideFolder";
+import Files from "./files";
+import Search from "./searchResult";
 
 const drawerWidth = 240;
 
@@ -103,22 +107,40 @@ class Admin extends React.Component {
       folder: true,
       main: "home"
     };
+    console.log(this.props);
+    this.handleChange = this.handleChange.bind(this);
   }
-
+  folder = () => {
+    this.setState(state => ({ main: "folder" }));
+  };
+  goto = m => {
+    console.log("goto", m);
+    this.props.history.push("/admin/" + m);
+    this.setState(state => ({ main: m }));
+  };
   home = () => {
-    this.setState(state => ({ main: "home" }));
+    this.goto("home");
   };
 
   users = () => {
-    this.setState(state => ({ main: "users" }));
+    this.goto("users");
   };
 
   orgInfo = () => {
-    this.setState(state => ({ main: "orgInfo" }));
+    this.goto("orgInfo");
   };
 
   access = () => {
-    this.setState(state => ({ main: "access" }));
+    this.goto("access");
+  };
+  insideFolder = () => {
+    this.goto("inside");
+  };
+  files = () => {
+    this.goto("files");
+  };
+  searchPage = () => {
+    this.goto("searchpage");
   };
 
   logOut(e) {
@@ -131,7 +153,8 @@ class Admin extends React.Component {
     const token = localStorage.usertoken;
     const decoded = jwt_decode(token);
     this.setState({
-      firstName: decoded.firstName
+      firstName: decoded.firstName,
+      main: this.props.child
     });
   }
   handleDrawerOpen = () => {
@@ -143,7 +166,28 @@ class Admin extends React.Component {
   };
   handleClick = () => {
     this.setState(state => ({ folder: !state.folder }));
+    this.folder();
   };
+
+  handleChange(e) {
+    let currentList = [];
+    let newList = [];
+
+    if (e.target.value !== "") {
+      currentList = this.props.items;
+      newList = currentList.filter(item => {
+        const lc = item.toLowerCase();
+        const filter = e.target.value.toLowerCase();
+
+        return lc.includes(filter);
+      });
+    } else {
+      newList = this.props.items;
+    }
+    this.setState({
+      filtered: newList
+    });
+  }
   render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
@@ -171,10 +215,16 @@ class Admin extends React.Component {
               Hi, {this.state.firstName}!
             </Typography>
             <MDBCol md="6" style={{ flex: 1 }}>
-              <MDBInput hint="Search" type="text" containerClass="mt-0" />
+              <MDBInput
+                hint="Search"
+                type="text"
+                containerClass="mt-0"
+                className="input"
+                onChange={this.handleChange}
+              />
             </MDBCol>
 
-            <i class="fas fa-user fa-2x" id="usericon" />
+            <i className="fas fa-user fa-2x" id="usericon" />
 
             <MDBBtn right href="" onClick={this.logOut.bind(this)}>
               LOG OUT
@@ -190,7 +240,8 @@ class Admin extends React.Component {
             paper: classes.drawerPaper
           }}
         >
-          <div className={classes.drawerHeader}>
+          <div className={classes.drawerHeader} id="drawerdiv">
+            <img src="/favicon.ico" className="logo" />
             <IconButton onClick={this.handleDrawerClose}>
               {theme.direction === "ltr" ? (
                 <ChevronLeftIcon />
@@ -207,13 +258,18 @@ class Admin extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button onClick={this.users}>
+            <ListItem
+              button
+              onClick={() => {
+                this.goto("users");
+              }}
+            >
               <ListItemIcon>
                 <PortraitRounded />
               </ListItemIcon>
               <ListItemText primary="Users" />
             </ListItem>
-            <ListItem button onClick={this.access}>
+            <ListItem button onClick={this.access} access={this.access}>
               <ListItemIcon>
                 <VerifiedUser />
               </ListItemIcon>
@@ -237,6 +293,23 @@ class Admin extends React.Component {
             </ListItem>
             <Collapse in={this.state.folder} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={this.folder}
+                >
+                  <ListItemIcon>
+                    <PlusOne />
+                  </ListItemIcon>
+                  <ListItemText inset primary="Add New Folder" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={this.files}
+                >
+                  <ListItemText inset primary="Files" />
+                </ListItem>
                 <ListItem button className={classes.nested}>
                   <ListItemIcon>
                     <StarBorder />
@@ -253,10 +326,23 @@ class Admin extends React.Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          {this.state.main == "home" ? <Home /> : null}
-          {this.state.main == "users" ? <Users /> : null}
-          {this.state.main == "access" ? <Access /> : null}
-          {this.state.main == "orgInfo" ? <Organization /> : null}
+          {this.state.main === "home" ? (
+            <Home />
+          ) : this.state.main === "users" ? (
+            <Users />
+          ) : this.state.main === "access" ? (
+            <Access />
+          ) : this.state.main === "orgInfo" ? (
+            <Organization company={this.props.company} />
+          ) : this.state.main === "folder" ? (
+            <Folders insideFolder={this.insideFolder} />
+          ) : this.state.main === "inside" ? (
+            <InsideFolder />
+          ) : this.state.main === "files" ? (
+            <Files />
+          ) : this.state.main === "searchpage" ? (
+            <Search />
+          ) : null}
         </main>
       </div>
     );
@@ -268,4 +354,4 @@ Admin.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(Admin);
+export default withRouter(withStyles(styles, { withTheme: true })(Admin));

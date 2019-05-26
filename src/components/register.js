@@ -10,7 +10,7 @@ class Register extends Component {
       lastName: "",
       email: "",
       password: "",
-      role: ""
+      role: "Admin"
     };
 
     this.onChange = this.onChange.bind(this);
@@ -35,11 +35,11 @@ class Register extends Component {
     };
 
     if (
-      user.firstName != "" &&
-      user.lastName != "" &&
-      user.role != "" &&
-      user.email != "" &&
-      user.password != ""
+      user.firstName !== "" &&
+      user.lastName !== "" &&
+      user.role !== "" &&
+      user.email !== "" &&
+      user.password !== ""
     ) {
       register(user).then(res => {
         this.props.history.push("/login");
@@ -48,15 +48,26 @@ class Register extends Component {
   }
   render() {
     return (
-      <div className="container">
+      <div className="animatedBackground">
+        <ul className="box-area">
+          <li />
+          <li />
+          <li />
+          <li />
+          <li />
+          <li />
+        </ul>
         <div className="row">
-          <div className="col-md-6 mt-5 mx-auto">
+          <div className="formalogin col-md-6 mt-5 mx-auto">
             <form
               onSubmit={this.onSubmit}
               className="needs-validation"
               noValidate
+              id="registerform"
             >
-              <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+              <h1 className="h3 mb-3 font-weight-normal" id="registerhead">
+                Sign Up
+              </h1>
               <div className="form-group">
                 <label htmlFor="firstName">First Name</label>
                 <input
@@ -115,6 +126,7 @@ class Register extends Component {
                   value={this.state.role}
                   onChange={this.onChange}
                   required
+                  disabled
                 />
                 <div className="invalid-feedback">
                   Please enter your profession/role in th ecompany.
