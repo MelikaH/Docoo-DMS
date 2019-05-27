@@ -92,7 +92,7 @@ folders.get("/", (req, res) => {
 folders.get("/:id", (req, res) => {
   Folder.findById(req.params.id, function(err, content) {
     if (!content) {
-      return next(new Error("Unable To Find Any Content in This Folder"));
+      return new Error("Unable To Find Any Content in This Folder");
     } else {
       res.json(content);
     }

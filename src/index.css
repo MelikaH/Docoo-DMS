@@ -391,3 +391,7 @@ h2.welcome {
 #usericon {
   color: white;
 }
+#navbaricon {
+  width: 70px;
+  height: 70px;
+}

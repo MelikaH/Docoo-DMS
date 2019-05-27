@@ -78,7 +78,7 @@ class Landing extends Component {
           <nav class="navbar navbar-expand-lg navbar-dark" id="firstnav">
             <div className="container ">
               <a className="navbar-brand" href="">
-                <img src="/favicon.png" />
+                <img src="/favicon.ico" id="navbaricon" />
               </a>
               <button
                 class="navbar-toggler"

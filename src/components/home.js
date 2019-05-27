@@ -28,10 +28,10 @@ class Home extends Component {
       progress: 0,
       isOpen: false,
       selectedFile: null,
-      name: "",
-      description: "",
-      tags: "",
-      creator: "",
+      name: props.file ? props.file.name : "",
+      description: props.file ? props.file.description : "",
+      tags: props.file ? props.file.tags : "",
+      creator: props.file ? props.file.creator : "",
       date: this.Date,
       id: "",
       files: []
@@ -40,6 +40,7 @@ class Home extends Component {
     this.handleUpload = this.handleUpload.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    console.log(props);
   }
 
   componentDidMount() {
@@ -177,7 +178,7 @@ class Home extends Component {
                   active={barprogress}
                   style={{ flex: 1 }}
                 />
-                <p>{this.state.creator}</p>
+                <p>Creator:{this.state.creator}</p>
                 <MDBCol md="3" className="ml-md-auto">
                   <MDBRow>
                     <MDBBtn type="submit" style={{ flex: 1 }}>

@@ -154,12 +154,12 @@ class NewFolder extends Component {
             </MDBCol>
             <MDBCol>
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="role-permissiona">Manager</InputLabel>
+                <InputLabel htmlFor="role-permissiona">Assistant</InputLabel>
                 <NativeSelect
                   defaultValue={2}
                   input={
                     <Input
-                      name="permissionManager"
+                      name="permissionAssistant"
                       id="role-permission"
                       value={this.state.permission}
                       onChange={this.handleChange}
@@ -187,6 +187,7 @@ class NewFolder extends Component {
               type="text"
               className="form-control"
               name="parentid"
+              placeholder="Parent folder id"
               value={this.state.parentId}
               onChange={this.onChange}
               required

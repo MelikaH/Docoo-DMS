@@ -65,7 +65,7 @@ class Files extends Component {
   };
 
   toggle = (nr, title, fil) => {
-    console.log()
+    console.log(fil);
     let modalNumber = "modal" + nr;
     this.setState({
       [modalNumber]: !this.state[modalNumber],
@@ -93,7 +93,6 @@ class Files extends Component {
                 tag="a"
                 size="lg"
                 floating
-                id="addemployee"
                 onClick={() => this.toggle(9, "File info", {})}
               >
                 <i className=" far fa-file fa-6x" />
@@ -125,7 +124,7 @@ class Files extends Component {
             </MDBCol>
           ))}
         </MDBRow>
-        <div id="modalContainer">
+        <div id="modalContainer1">
           <MDBModal
             className="modalup"
             isOpen={this.state.modal14}
@@ -146,7 +145,7 @@ class Files extends Component {
             </MDBModalFooter>
           </MDBModal>
         </div>
-        <div id="modalContainer">
+        <div id="modalContainer2">
           <MDBModal
             className="modalup"
             isOpen={this.state.modal9}

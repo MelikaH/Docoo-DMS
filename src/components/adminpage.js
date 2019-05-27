@@ -38,6 +38,7 @@ import Access from "../components/access";
 import InsideFolder from "./insideFolder";
 import Files from "./files";
 import Search from "./searchResult";
+import NoContent from "./noContent";
 
 const drawerWidth = 240;
 
@@ -214,15 +215,6 @@ class Admin extends React.Component {
             <Typography variant="h6" color="inherit" noWrap style={{ flex: 1 }}>
               Hi, {this.state.firstName}!
             </Typography>
-            <MDBCol md="6" style={{ flex: 1 }}>
-              <MDBInput
-                hint="Search"
-                type="text"
-                containerClass="mt-0"
-                className="input"
-                onChange={this.handleChange}
-              />
-            </MDBCol>
 
             <i className="fas fa-user fa-2x" id="usericon" />
 
@@ -296,16 +288,6 @@ class Admin extends React.Component {
                 <ListItem
                   button
                   className={classes.nested}
-                  onClick={this.folder}
-                >
-                  <ListItemIcon>
-                    <PlusOne />
-                  </ListItemIcon>
-                  <ListItemText inset primary="Add New Folder" />
-                </ListItem>
-                <ListItem
-                  button
-                  className={classes.nested}
                   onClick={this.files}
                 >
                   <ListItemText inset primary="Files" />
@@ -342,7 +324,9 @@ class Admin extends React.Component {
             <Files />
           ) : this.state.main === "searchpage" ? (
             <Search />
-          ) : null}
+          ) : (
+            <NoContent />
+          )}
         </main>
       </div>
     );

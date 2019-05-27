@@ -8,18 +8,21 @@ import {
   MDBCardText,
   MDBRow,
   MDBCol,
-  MDBIcon,
+  MDBInput,
   MDBModal,
   MDBModalBody,
   MDBModalHeader,
   MDBModalFooter
 } from "mdbreact";
+import { List } from "material-ui/List";
+
 import Folder from "@material-ui/icons/Folder";
 import Edit from "@material-ui/icons/Edit";
 import Mail from "@material-ui/icons/Mail";
 import Delete from "@material-ui/icons/Delete";
 import NewFolder from "./newFolder";
 import { withRouter } from "react-router-dom";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import { MDBBtn } from "mdbreact";
 import { getUsers } from "./userFunctions";
@@ -40,8 +43,10 @@ class Folders extends Component {
       modal14: false,
       permissions: [],
       creator: "",
-      id: ""
+      id: "",
+      filtered: []
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -51,7 +56,8 @@ class Folders extends Component {
       creator: decoded.firstName + " " + decoded.lastName,
       folders: [],
       users: [],
-      modalTitle: ""
+      modalTitle: "",
+      filtered: this.state.folders
     });
     console.log("starting getting folders");
     this.loadFolders();
@@ -88,7 +94,32 @@ class Folders extends Component {
       console.log("folders all set");
     });
   };
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      filtered: nextProps.this.state.folders
+    });
+  }
 
+  handleChange(e) {
+    let currentList = [];
+    let newList = [];
+
+    if (e.target.value !== "") {
+      currentList = this.state.folders;
+
+      newList = currentList.filter(folder => {
+        const lc = folder.toString().toLowerCase();
+        const filter = e.target.value.toString().toLowerCase();
+
+        return lc.includes(filter);
+      });
+    } else {
+      newList = this.state.folders;
+    }
+    this.setState({
+      filtered: newList
+    });
+  }
   toggle = (nr, title, fldr) => {
     let modalNumber = "modal" + nr;
     this.setState({
@@ -102,6 +133,16 @@ class Folders extends Component {
       <div id="folderDiv" className="my-5 px-1 pb-1 text-center">
         <h2 centered>Folder Section</h2>
         <hr />
+        <MDBCol md="6" style={{ flex: 1 }}>
+          <MDBInput
+            hint="Search"
+            type="text"
+            containerClass="mt-0"
+            className="input"
+            onChange={this.handleChange}
+          />
+        </MDBCol>
+
         <MDBBtn
           gradient="aqua"
           id="addemployee"
