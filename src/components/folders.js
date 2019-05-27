@@ -43,8 +43,7 @@ class Folders extends Component {
       modal14: false,
       permissions: [],
       creator: "",
-      id: "",
-      filtered: []
+      id: ""
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -56,8 +55,7 @@ class Folders extends Component {
       creator: decoded.firstName + " " + decoded.lastName,
       folders: [],
       users: [],
-      modalTitle: "",
-      filtered: this.state.folders
+      modalTitle: ""
     });
     console.log("starting getting folders");
     this.loadFolders();
@@ -78,7 +76,8 @@ class Folders extends Component {
       description: this.state.description,
       persmission: this.state.permissions,
       creator: this.state.creator,
-      folders: []
+      folders: [],
+      filter: ""
     });
     getUsers().then(x => {
       console.log("setting state");
@@ -94,30 +93,11 @@ class Folders extends Component {
       console.log("folders all set");
     });
   };
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      filtered: nextProps.this.state.folders
-    });
-  }
 
   handleChange(e) {
-    let currentList = [];
-    let newList = [];
-
-    if (e.target.value !== "") {
-      currentList = this.state.folders;
-
-      newList = currentList.filter(folder => {
-        const lc = folder.toString().toLowerCase();
-        const filter = e.target.value.toString().toLowerCase();
-
-        return lc.includes(filter);
-      });
-    } else {
-      newList = this.state.folders;
-    }
+    const filter = e.target.value.toString().toLowerCase();
     this.setState({
-      filtered: newList
+      filter: filter
     });
   }
   toggle = (nr, title, fldr) => {
@@ -151,21 +131,25 @@ class Folders extends Component {
           + ADD NEW FOLDER{" "}
         </MDBBtn>
         <MDBRow>
-          {this.state.folders.map((folder, key) => (
-            <MDBCol key={folder._id} lg="3" md="6" className="mb-lg-0 mb-5">
-              <MDBBtn
-                tag="a"
-                size="lg"
-                floating
-                id="addemployee"
-                onClick={this.insideFolder}
-              >
-                <i className=" far fa-folder fa-6x" />
-                <br />
-                {folder.name}
-              </MDBBtn>
-            </MDBCol>
-          ))}
+          {this.state.folders.map((folder, key) =>
+            !folder.name.includes(this.state.filter) ? (
+              ""
+            ) : (
+              <MDBCol key={folder._id} lg="3" md="6" className="mb-lg-0 mb-5">
+                <MDBBtn
+                  tag="a"
+                  size="lg"
+                  floating
+                  id="addemployee"
+                  onClick={this.insideFolder}
+                >
+                  <i className=" far fa-folder fa-6x" />
+                  <br />
+                  {folder.name}
+                </MDBBtn>
+              </MDBCol>
+            )
+          )}
         </MDBRow>
         <div id="modalContainer">
           <MDBModal
